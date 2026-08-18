@@ -1579,18 +1579,23 @@ async function saveSettingsPage(){
 
 async function loadAdvanced(orderId){ return apiRequest(`/orders/${encodeURIComponent(orderId)}/advanced`); }
 function escAdvanced(v){ return String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
-let advancedCache = null;
-let advancedCacheAt = 0;
-async function getAdvancedCollections(force = false) {
-  const now = Date.now();
-  if (!force && advancedCache && now - advancedCacheAt < 30000) return advancedCache;
-  const [qcRes, docRes, shipRes, auditRes, notRes] = await Promise.all([
-    apiRequest('/qc'), apiRequest('/documents'), apiRequest('/shipments'),
-    apiRequest('/audit'), apiRequest('/notifications')
-  ]);
-  advancedCache = { qcRes, docRes, shipRes, auditRes, notRes };
-  advancedCacheAt = now;
-  return advancedCache;
+async function getAdvancedCollections() {
+    const [qcRes, docRes, shipRes, auditRes, notRes] =
+        await Promise.all([
+            apiRequest("/qc"),
+            apiRequest("/documents"),
+            apiRequest("/shipments"),
+            apiRequest("/audit"),
+            apiRequest("/notifications")
+        ]);
+
+    return {
+        qcRes,
+        docRes,
+        shipRes,
+        auditRes,
+        notRes
+    };
 }
 
 function closeAdvancedAddModal(){
@@ -1921,10 +1926,9 @@ async function saveAdvancedAdd(type){
         });
 
         closeAdvancedAddModal();
-        advancedCache = null;
 
         try {
-            await renderAdvancedPages(true);
+            await renderAdvancedPages();
         } catch (renderError) {
             console.error("Saved successfully, but table refresh failed:", renderError);
         }
@@ -1950,22 +1954,28 @@ window.closeAdvancedAddModal = closeAdvancedAddModal;
 async function deleteAdvancedRecord(type,id){
     if(!confirm(`Delete this ${type} record?`)) return;
     const endpoints={qc:`/qc/${encodeURIComponent(id)}`,document:`/documents/${encodeURIComponent(id)}`,shipment:`/shipments/${encodeURIComponent(id)}`,notification:`/notifications/${encodeURIComponent(id)}`};
-    await apiRequest(endpoints[type],{method:'DELETE'}); await renderAdvancedPages(true);
+   await apiRequest(endpoints[type],{method:'DELETE'});
+await renderAdvancedPages();
 }
 async function editAdvancedRecord(type,id){
-    const {qcRes,docRes,shipRes,notRes}=await getAdvancedCollections(true);
+    const {qcRes,docRes,shipRes,notRes}=await getAdvancedCollections();
     const sources={qc:qcRes.qc,document:docRes.documents,shipment:shipRes.shipments,notification:notRes.notifications};
     const item=(sources[type]||[]).find(x=>x.id===id); if(!item) return;
     const fields={qc:['test','result','spec','unit','status'],document:['name','version','visibility','fileName'],shipment:['container','seal','vessel','voyage','loading','destination','etd','eta','bl'],notification:['message','order','enabled']};
     const next={...item};
     for(const key of fields[type]){ const value=prompt(`Edit ${key}`,String(item[key] ?? '')); if(value===null)return; next[key]=key==='enabled'?value.toLowerCase()!=='false':value; }
     const endpoints={qc:`/qc/${encodeURIComponent(id)}`,document:`/documents/${encodeURIComponent(id)}`,shipment:`/shipments/${encodeURIComponent(id)}`,notification:`/notifications/${encodeURIComponent(id)}`};
-    await apiRequest(endpoints[type],{method:'PUT',body:JSON.stringify(next)}); await renderAdvancedPages(true);
+    await apiRequest(endpoints[type], {
+    method: 'PUT',
+    body: JSON.stringify(next)
+});
+
+await renderAdvancedPages();
 }
 
-async function renderAdvancedPages(force = false){
+async function renderAdvancedPages(){
   try{
-    const {qcRes,docRes,shipRes,auditRes,notRes}=await getAdvancedCollections(force);
+    const {qcRes,docRes,shipRes,auditRes,notRes}=await getAdvancedCollections();
     const qb=document.getElementById('qualityBody'); if(qb) qb.innerHTML=(qcRes.qc||[]).map(q=>`<tr><td>${escAdvanced(q.orderId)}</td><td>${escAdvanced((ORDERS.find(o=>o.id===q.orderId)||{}).product||'—')}</td><td>${escAdvanced(q.test)}</td><td>${escAdvanced(q.result)}</td><td>${escAdvanced(q.spec)} ${escAdvanced(q.unit)}</td><td>${escAdvanced(q.status)}</td><td>${escAdvanced(q.date)}</td><td><button class="view-btn" onclick="editAdvancedRecord('qc','${q.id}')">Edit</button> <button class="view-btn danger-action" onclick="deleteAdvancedRecord('qc','${q.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="8">No QC records.</td></tr>';
     const db=document.getElementById('documentsBody'); if(db) db.innerHTML=(docRes.documents||[]).map(d=>`<tr><td>${escAdvanced(d.name)}</td><td>${escAdvanced(d.orderId)}</td><td>${escAdvanced(d.version)}</td><td>${d.visibility==='customer'?'<span class="tag tag-active">Customer Visible</span>':'<span class="tag">Internal Only</span>'}</td><td>${escAdvanced(d.date)}</td><td><button class="view-btn" onclick="editAdvancedRecord('document','${d.id}')">Edit</button> <button class="view-btn danger-action" onclick="deleteAdvancedRecord('document','${d.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="6">No documents.</td></tr>';
     const sb=document.getElementById('shipmentsBody'); if(sb) sb.innerHTML=(shipRes.shipments||[]).map(s=>`<tr><td>${escAdvanced(s.orderId)}</td><td>${escAdvanced(s.container)}</td><td>${escAdvanced(s.seal)}</td><td>${escAdvanced(s.vessel)}</td><td>${escAdvanced(s.loading)}</td><td>${escAdvanced(s.destination)}</td><td>${escAdvanced(s.etd)}</td><td>${escAdvanced(s.eta)}</td><td><button class="view-btn" onclick="editAdvancedRecord('shipment','${s.id}')">Edit</button> <button class="view-btn danger-action" onclick="deleteAdvancedRecord('shipment','${s.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="9">No shipment records.</td></tr>';
@@ -2317,7 +2327,7 @@ async function saveStatusUpdate() {
         renderRecent();
         renderOrders();
         if (activeModalOrderId === updated.id) await openOrderModal(updated.id);
-        renderAdvancedPages(true);
+        renderAdvancedPages();
         
     } catch (e) {
         errorBox.textContent = e.message || "Could not update status.";
@@ -2345,8 +2355,7 @@ async function saveAdvancedEditor(orderId,type){
     else { endpoint='/shipments'; body={orderId,container:document.getElementById('advContainer').value,seal:document.getElementById('advSeal').value,vessel:document.getElementById('advVessel').value,voyage:document.getElementById('advVoyage').value,loading:document.getElementById('advLoading').value,destination:document.getElementById('advDestination').value,etd:document.getElementById('advEtd').value,eta:document.getElementById('advEta').value,blNumber:document.getElementById('advBl').value,by:'Shipping'}; }
     await apiRequest(endpoint,{method:'POST',body:JSON.stringify(body)});
     document.getElementById('advancedEditorOverlay').remove();
-    advancedCache = null;
-    await renderAdvancedPages(true);
+    await renderAdvancedPages();
     if (type !== 'notification') await openOrderModal(orderId);
   }catch(e){ error.textContent=e.message||'Could not save.'; }
 }
