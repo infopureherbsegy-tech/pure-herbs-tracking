@@ -1,0 +1,140 @@
+{
+  "orders": [
+    {
+      "id": "OOLU2336262600",
+      "customer": "Pure Herbs For The Export Of Aromatic Herbs And Seeds",
+      "product": "Coriander Seeds",
+      "latin": "Coriandrum sativum",
+      "qty": "32,000 kg",
+      "status": "Ready in Warehouse",
+      "dest": "Felixstowe, United Kingdom",
+      "expected": "2026-08-15",
+      "bookingStatus": "Confirmed",
+      "bookingParty": "Smart Express",
+      "forwarder": "Smart Express",
+      "containerQty": "2 × 40' Hi-Cube",
+      "cargoWeight": "18,000 kg",
+      "trafficMode": "FCL / FCL",
+      "placeOfReceipt": "El Dekheila, Al Iskandariyah, Egypt",
+      "portOfLoading": "El Dekheila / ACCHCO El Dekheila Terminal",
+      "portOfLoadingETA": "28 Aug 2026",
+      "vessel": "XIN LIAN YUN GANG 634N",
+      "voyage": "634N",
+      "etd": "30 Aug 2026",
+      "serviceCode": "NET2",
+      "vesselFlag": "China",
+      "portOfDischarge": "Felixstowe / Trinity Terminal Felixstowe",
+      "eta": "12 Sep 2026",
+      "cargoAvailability": "14 Sep 2026 15:00",
+      "cyCutoff": "26 Aug 2026 23:00",
+      "siCutoff": "25 Aug 2026 09:00",
+      "vgmCutoff": "26 Aug 2026 23:00",
+      "ucr": "6308047371022320022",
+      "csReference": "CSO5872218866",
+      "rateAgreement": "00151570",
+      "hsCode": "090921",
+      "invoiceNumber": "2662",
+      "invoiceDate": "20 Jun 2026",
+      "lotNumber": "K 26 / KK 26",
+      "packing": "40 jumbo bags (20 per container / 800 kg net per bag)",
+      "origin": "Egypt",
+      "totalGrossWeight": "32,160 kg",
+      "co2TTW": "1,603.41 kg",
+      "co2WTW": "1,883.82 kg",
+      "progress": 66,
+      "updated": "15 Aug 2026, 20:29"
+    }
+  ],
+  "trackingByCode": {
+    "OOLU2336262600": {
+      "code": "OOLU2336262600",
+      "orderId": "OOLU2336262600",
+      "status": "Ready in Warehouse",
+      "pct": 66,
+      "destination": "Felixstowe, United Kingdom",
+      "updated": "15 Aug 2026, 20:29",
+      "message": "Booking confirmed. Intended vessel: XIN LIAN YUN GANG 634N. ETD: 30 Aug 2026. ETA Felixstowe: 12 Sep 2026."
+    }
+  },
+  "customers": [
+    {
+      "id": "CUS-GREEN-MARKET",
+      "name": "Green Market",
+      "email": "contact@greenmarket.com",
+      "country": "USA",
+      "status": "Active"
+    },
+    {
+      "id": "CUS-HERBAL-HOUSE",
+      "name": "Herbal House",
+      "email": "hello@herbalhouse.com",
+      "country": "United Kingdom",
+      "status": "Active"
+    },
+    {
+      "id": "CUS-NATURE-FOODS",
+      "name": "Nature Foods",
+      "email": "orders@naturefoods.com",
+      "country": "Germany",
+      "status": "Active"
+    }
+  ],
+  "registeredUsers": [],
+  "products": [
+    {
+      "name": "Chamomile Flowers",
+      "latin": "Matricaria chamomilla",
+      "category": "Flowers",
+      "available": true
+    },
+    {
+      "name": "Hibiscus Flowers",
+      "latin": "Hibiscus sabdariffa",
+      "category": "Flowers",
+      "available": true
+    },
+    {
+      "name": "Peppermint Leaves",
+      "latin": "Mentha piperita",
+      "category": "Leaves",
+      "available": true
+    },
+    {
+      "name": "Moringa Leaves",
+      "latin": "Moringa oleifera",
+      "category": "Leaves",
+      "available": true
+    },
+    {
+      "name": "Anise Seeds",
+      "latin": "Pimpinella anisum",
+      "category": "Seeds",
+      "available": true
+    },
+    {
+      "name": "Fennel Seeds",
+      "latin": "Foeniculum vulgare",
+      "category": "Seeds",
+      "available": true
+    },
+    {
+      "name": "Coriander Seeds",
+      "latin": "Coriandrum sativum",
+      "category": "Seeds",
+      "available": true
+    }
+  ],
+  "statusHistory": [],
+  "qcTests": [],
+  "documents": [],
+  "shipments": [],
+  "notifications": [],
+  "auditLogs": [],
+  "settings": {
+    "companyName": "PURE HERBS",
+    "email": "",
+    "phone": "",
+    "address": "",
+    "website": ""
+  }
+}
