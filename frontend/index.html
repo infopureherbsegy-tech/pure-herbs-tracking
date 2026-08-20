@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pure Herbs — Shipment Tracker</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
+</script>
+
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     LANDING / TRACKING
+========================================================= -->
+
+<div id="landing">
+
+    <header class="lp-header">
+
+        <div class="lp-brand">
+          <img src="logo.png" alt="Pure Herbs" class="logo-image">        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="showAuth()"
+        >
+            Enter Customer Portal →
+        </button>
+
+    </header>
+
+    <section class="hero">
+
+        <div class="hero-veins" aria-hidden="true">
+            <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 1400 760"
+                preserveAspectRatio="xMidYMid slice"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <g
+                    opacity=".5"
+                    stroke="#E8CD8C"
+                    stroke-width="1"
+                >
+                    <circle
+                        cx="1180"
+                        cy="120"
+                        r="230"
+                        fill="none"
+                        opacity=".25"
+                    />
+
+                    <circle
+                        cx="1180"
+                        cy="120"
+                        r="310"
+                        fill="none"
+                        opacity=".15"
+                    />
+
+                    <path
+                        d="M980 340 Q1050 260 1180 260 Q1310 260 1380 340"
+                        fill="none"
+                        opacity=".3"
+                    />
+                </g>
+
+                <g
+                    opacity=".28"
+                    stroke="#CFE0D6"
+                    stroke-width="1.1"
+                    fill="none"
+                >
+                    <path
+                        d="M-20 620 C120 560 220 640 340 590 C460 540 540 610 660 570"
+                    />
+
+                    <path
+                        d="M-20 660 C140 600 240 680 380 630 C520 580 600 650 760 610"
+                    />
+                </g>
+            </svg>
+        </div>
+
+        <div class="hero-inner">
+
+            <div>
+
+                <div class="eyebrow">
+                    <span class="dash"></span>
+                    Global Herbal Export
+                </div>
+
+                <h1>
+                    From our fields
+                    <span class="hero-destination">
+                        to your destination.
+                    </span>
+                </h1>
+
+                <p class="lede">
+                    Check the current shipment status, destination and latest update —
+                    quickly and simply.
+                </p>
+
+                <div class="hero-ctas">
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="showAuth()"
+                    >
+                        Enter Customer Portal →
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- TRACKING CARD -->
+
+            <div class="track-card">
+
+                <div class="track-card-head">
+
+          
+
+                    <span class="tc-label">
+                        Shipment Tracking
+                    </span>
+
+                </div>
+
+                <div class="track-card-body">
+
+                    <h3>
+                        Track your order
+                    </h3>
+
+                    <div class="hint">
+                        Enter the order number and tracking code
+                        from your confirmation.
+                    </div>
+
+                    <div class="field">
+
+                        <label>
+                            Order Number
+                        </label>
+
+                        <input
+                            id="trackOrderNumber"
+                            type="text"
+                            placeholder="OOLU2336262600"
+                            autocomplete="off"
+                        >
+
+                        <span
+                            id="trackOrderError"
+                            class="field-error"
+                        ></span>
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>
+                            Tracking Code
+                        </label>
+
+                        <input
+                            id="trackCode"
+                            type="text"
+                            placeholder="OOLU2336262600"
+                            autocomplete="off"
+                        >
+
+                        <span
+                            id="trackCodeError"
+                            class="field-error"
+                        ></span>
+
+                    </div>
+
+                    <button
+                        id="trackShipmentBtn"
+                        class="btn btn-primary btn-block"
+                        type="button"
+                        onclick="trackShipment()"
+                    >
+                        Track Shipment →
+                    </button>
+
+                    <div
+                        id="trackingResult"
+                        class="status-box"
+                        aria-live="polite"
+                    >
+
+                        <div class="status-top">
+
+                            <div>
+
+                                <div class="status-eyebrow">
+                                    Shipment status
+                                </div>
+
+                                <div
+                                    id="trackStatusTitle"
+                                    class="status-title"
+                                >
+                                    Ready to track
+                                </div>
+
+                            </div>
+
+                            <span
+                                id="trackPill"
+                                class="pill"
+                            >
+                                Awaiting lookup
+                            </span>
+
+                        </div>
+
+                        <div class="vine-track">
+                            <div
+                                id="trackVineFill"
+                                class="vine-fill"
+                                style="width:0%"
+                            ></div>
+                        </div>
+
+                        <div
+                            id="trackPct"
+                            class="status-pct"
+                        >
+                            0%
+                        </div>
+
+                        <div class="status-meta">
+
+                            <div>
+                                Order
+                                <b id="trackOrderOut">—</b>
+                            </div>
+
+                            <div>
+                                Destination
+                                <b id="trackDestinationOut">—</b>
+                            </div>
+
+                            <div>
+                                Updated
+                                <b id="trackUpdatedOut">—</b>
+                            </div>
+
+                        </div>
+
+                        <div
+                            id="trackMessage"
+                            class="hint tracking-simple-note"
+                            style="margin:14px 0 0"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="vine-wrap">
+
+            <svg
+                viewBox="0 0 1400 90"
+                width="100%"
+                height="90"
+                preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+
+                <path
+                    class="vine-path"
+                    d="M-10 70 C160 20 320 95 500 55 C680 15 840 90 1020 50 C1160 20 1300 60 1410 35"
+                />
+
+                <g class="vine-bloom">
+
+                    <circle
+                        cx="1382"
+                        cy="30"
+                        r="7"
+                        fill="#F8F6EE"
+                    />
+
+                    <circle
+                        cx="1382"
+                        cy="30"
+                        r="3"
+                        fill="#D2A23E"
+                    />
+
+                </g>
+
+            </svg>
+
+        </div>
+
+    </section>
+
+    <!-- HOW IT WORKS -->
+
+    <section class="section">
+
+        <div class="section-label">
+            Simple · Secure · Clear
+        </div>
+
+        <h2 class="section-title">
+            How It Works
+        </h2>
+
+        <div class="steps">
+
+            <div class="step-card">
+
+                <div class="step-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4"/>
+                        <circle cx="12" cy="12" r="9"/>
+                    </svg>
+                </div>
+
+                <div class="step-mark">
+                    01
+                </div>
+
+                <h4>
+                    Order confirmed
+                </h4>
+
+                <p>
+                    Every shipment receives a unique order
+                    number and tracking code.
+                </p>
+
+            </div>
+
+            <div class="step-card">
+
+                <div class="step-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 3v18h18"/>
+                        <path d="M7 14l3-4 3 3 5-6"/>
+                    </svg>
+                </div>
+
+                <div class="step-mark">
+                    02
+                </div>
+
+                <h4>
+                    Production & Quality
+                </h4>
+
+                <p>
+                    Follow production and quality control
+                    before the shipment leaves our facilities.
+                </p>
+
+            </div>
+
+            <div class="step-card">
+
+                <div class="step-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 12h13"/>
+                        <path d="M13 7l5 5-5 5"/>
+                        <path d="M19 5h2v14h-2"/>
+                    </svg>
+                </div>
+
+                <div class="step-mark">
+                    03
+                </div>
+
+                <h4>
+                    Final delivery
+                </h4>
+
+                <p>
+                    Track your shipment until it reaches
+                    its final destination.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer class="lp-footer">
+        © 2026 Pure Herbs · Global Herbal Export
+    </footer>
+
+</div>
+
+<!-- =========================================================
+     AUTH
+========================================================= -->
+
+<div id="auth">
+
+    <div class="auth-side">
+
+        <div class="hero-veins">
+            <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 700 900"
+                preserveAspectRatio="xMidYMid slice"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <g
+                    opacity=".4"
+                    stroke="#E8CD8C"
+                    stroke-width="1"
+                    fill="none"
+                >
+                    <circle
+                        cx="560"
+                        cy="760"
+                        r="220"
+                        opacity=".3"
+                    />
+
+                    <circle
+                        cx="560"
+                        cy="760"
+                        r="300"
+                        opacity=".18"
+                    />
+                </g>
+
+                <g
+                    opacity=".25"
+                    stroke="#CFE0D6"
+                    stroke-width="1"
+                    fill="none"
+                >
+                    <path
+                        d="M-20 300 C100 260 180 340 300 300 C420 260 480 330 620 300"
+                    />
+                </g>
+            </svg>
+        </div>
+
+        <div class="auth-side-content">
+
+    
+
+        </div>
+      
+
+        <div>
+
+            <h1>
+                Global herbal products,
+                tracked with confidence.
+            </h1>
+
+            <p class="lede">
+                Access your customer portal to monitor
+                orders, shipment progress and delivery updates.
+            </p>
+
+        </div>
+
+        <div class="footline">
+            Pure Herbs · Global Herbal Export
+        </div>
+
+    </div>
+
+    <div class="auth-form-wrap">
+
+        <div class="auth-form">
+          <img src="logo.png" alt="Pure Herbs" class="header-logo">
+
+            <div
+                class="back-link"
+                onclick="showLanding()"
+            >
+                ← Back to website
+            </div>
+
+            <h2>
+                Customer Portal
+            </h2>
+
+            <p>
+                Sign in to manage your shipments.
+            </p>
+
+            <div class="tabs">
+
+                <button
+                    id="tabSignIn"
+                    class="active"
+                    onclick="switchAuthTab('signin')"
+                >
+                    Customer Login
+                </button>
+
+                <button
+                    id="tabSignUp"
+                    onclick="switchAuthTab('signup')"
+                >
+                    Customer Registration
+                </button>
+
+            </div>
+
+            <div class="auth-role-note">
+                Create a customer account to view your shipments, order status and delivery updates from one place.
+            </div>
+
+            <div
+                id="authError"
+                class="form-error hidden"
+            ></div>
+
+            <!-- SIGN IN -->
+
+            <div id="signInView">
+                <div class="field">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                        id="loginEmail"
+                        type="email"
+                        placeholder="you@example.com"
+                        autocomplete="off"
+                    >
+
+                    <span
+                        id="loginEmailError"
+                        class="field-error"
+                    ></span>
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        id="loginPassword"
+                        type="password"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                    >
+
+                    <span
+                        id="loginPasswordError"
+                        class="field-error"
+                    ></span>
+
+                </div>
+
+                <button
+                    class="btn btn-primary btn-block"
+                    onclick="handleLogin()"
+                >
+                    Sign In →
+                </button>
+
+            </div>
+
+
+                <div id="forgotPasswordView" class="hidden">
+
+                    <div class="forgot-head">
+                        <button
+                            class="text-back"
+                            type="button"
+                            onclick="switchAuthTab('signin')"
+                        >
+                            ← Back to Customer Login
+                        </button>
+
+                        <h3>Reset your password</h3>
+
+                        <p>
+                            Enter your account email and choose a new password.
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label>Email</label>
+                        <input
+                            id="forgotEmail"
+                            type="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                        >
+                        <span
+                            id="forgotEmailError"
+                            class="field-error"
+                        ></span>
+                    </div>
+
+                    <div class="field">
+                        <label>New Password</label>
+                        <input
+                            id="forgotNewPassword"
+                            type="password"
+                            placeholder="Minimum 8 characters"
+                            autocomplete="new-password"
+                        >
+                        <span
+                            id="forgotPasswordError"
+                            class="field-error"
+                        ></span>
+                    </div>
+
+                    <div class="field">
+                        <label>Confirm New Password</label>
+                        <input
+                            id="forgotConfirmPassword"
+                            type="password"
+                            placeholder="Repeat your new password"
+                            autocomplete="new-password"
+                        >
+                        <span
+                            id="forgotConfirmError"
+                            class="field-error"
+                        ></span>
+                    </div>
+
+                    <button
+                        class="btn btn-primary btn-block"
+                        type="button"
+                        onclick="handleForgotPassword()"
+                    >
+                        Reset Password →
+                    </button>
+
+                    <div
+                        id="forgotSuccess"
+                        class="form-success hidden"
+                    ></div>
+
+                </div>
+
+
+                <button
+                    id="forgotLink"
+                    class="forgot-link"
+                    type="button"
+                    onclick="switchAuthTab('forgot')"
+                >
+                    Forgot password?
+                </button>
+
+            <!-- SIGN UP -->
+
+            <div
+                id="signUpView"
+                class="hidden"
+            >
+
+                <div class="field">
+
+                    <label>
+                        Name
+                    </label>
+
+                    <input
+                        id="signupName"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Your name"
+                    >
+
+                    <span
+                        id="signupNameError"
+                        class="field-error"
+                    ></span>
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                        id="signupEmail"
+                        type="email"
+                        autocomplete="off"
+                        placeholder="you@example.com"
+                    >
+
+                    <span
+                        id="signupEmailError"
+                        class="field-error"
+                    ></span>
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        id="signupPassword"
+                        type="password"
+                        autocomplete="new-password"
+                        placeholder="Minimum 8 characters"
+                    >
+
+                    <span
+                        id="signupPasswordError"
+                        class="field-error"
+                    ></span>
+
+                </div>
+
+                <button
+                    class="btn btn-primary btn-block"
+                    onclick="handleSignup()"
+                >
+                    Create Customer Account →
+                </button>
+
+            </div>
+
+            <button
+                class="auth-admin-link"
+                onclick="showAdminLogin()"
+                type="button"
+            >
+                Admin access →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CUSTOMER PORTAL
+========================================================= -->
+
+<div id="customer">
+
+    <div class="customer-shell">
+
+        <header class="customer-topbar">
+            <div class="customer-brand">
+                <img src="logo.png" alt="Pure Herbs">
+            </div>
+
+            <div class="customer-user">
+                <div class="customer-avatar" id="customerAvatar">C</div>
+                <div class="customer-user-info">
+                    <b id="customerName">Customer</b>
+                    <span id="customerEmail">customer@example.com</span>
+                </div>
+                <button class="btn btn-light" onclick="signOut()">Sign out</button>
+            </div>
+        </header>
+
+        <section class="customer-hero">
+            <div class="customer-welcome">
+                <div class="eyebrow">
+                    <span class="dash"></span>
+                    CUSTOMER PORTAL
+                </div>
+                <h1 id="customerWelcome">Welcome back.</h1>
+                <p>
+                    View your orders, shipment progress and expected delivery dates.
+                    Your account keeps your Pure Herbs activity in one place.
+                </p>
+            </div>
+
+            <div class="customer-summary">
+                <div class="customer-mini-card">
+                    <span>Total Orders</span>
+                    <b id="customerTotalOrders">0</b>
+                </div>
+                <div class="customer-mini-card">
+                    <span>Active Shipments</span>
+                    <b id="customerActiveOrders">0</b>
+                </div>
+                <div class="customer-mini-card">
+                    <span>Delivered</span>
+                    <b id="customerDeliveredOrders">0</b>
+                </div>
+                <div class="customer-mini-card">
+                    <span>Destinations</span>
+                    <b id="customerDestinations">0</b>
+                </div>
+            </div>
+        </section>
+
+        <div class="customer-section-head">
+            <div>
+                <h2>My Orders</h2>
+                <p>Track every shipment assigned to your customer account.</p>
+            </div>
+        </div>
+
+        <section id="customerOrders" class="customer-orders"></section>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     ADMIN
+========================================================= -->
+
+<div id="admin">
+
+    <aside class="sidebar">
+
+      <div class="brand">
+        <img src="logo.png" alt="Pure Herbs" class="sidebar-logo">
+    </div>
+
+        <ul class="nav">
+
+            <li
+                class="active"
+                onclick="showPage('dashboard', this)"
+            >
+                Dashboard
+            </li>
+
+            <li
+                onclick="showPage('orders', this)"
+            >
+                Orders
+            </li>
+
+            <li
+                onclick="showPage('customers', this)"
+            >
+                Customers
+            </li>
+
+            <li onclick="showPage('registered-users', this)">
+                Registered Users
+            </li>
+
+            <li
+                onclick="showPage('products', this)"
+            >
+                Products
+            </li>
+
+            <li onclick="showPage('quality', this)">Quality Control</li>
+
+            <li onclick="showPage('documents', this)">Documents</li>
+
+            <li onclick="showPage('shipments', this)">Shipments</li>
+
+            <li onclick="showPage('notifications', this)">Notifications</li>
+
+            <li onclick="showPage('audit', this)">Audit Log</li>
+
+            <li
+                onclick="showPage('settings', this)"
+            >
+                Settings
+            </li>
+
+        </ul>
+
+        <div class="sidebar-foot">
+
+            <div class="sidebar-user">
+                <b>Administrator</b>
+                <span>Operations Dashboard</span>
+            </div>
+
+            <div
+                class="signout"
+                onclick="signOut()"
+            >
+                Sign out
+            </div>
+
+        </div>
+
+    </aside>
+
+    <main class="main">
+
+        <!-- DASHBOARD -->
+
+        <section
+            id="page-dashboard"
+            class="page active"
+        >
+
+            <div class="page-head">
+
+                <div>
+                    <h2>
+                        Dashboard
+                    </h2>
+
+                    <p>
+                        Overview of your herbal shipment operations.
+                    </p>
+                </div>
+
+                <div
+                    id="welcomeToast"
+                    class="toast"
+                >
+                    Welcome back.
+                </div>
+
+            </div>
+
+            <div class="dashboard-visual-hero">
+
+                <div class="dashboard-visual-copy">
+
+                    <span class="dashboard-kicker">
+                        PURE HERBS · OPERATIONS
+                    </span>
+
+                    <h3>
+                        Natural products,
+                        tracked beautifully.
+                    </h3>
+
+                    <p>
+                        Monitor shipments, production and quality
+                        across your herbal supply chain from one
+                        calm, visual workspace.
+                    </p>
+
+                    <div class="dashboard-hero-meta">
+
+                        <span>
+                            <b>9</b>
+                            Total Shipments
+                        </span>
+
+                        <span>
+                            <b>3</b>
+                            Markets
+                        </span>
+
+                        <span>
+                            <b>98%</b>
+                            On-time rate
+                        </span>
+
+                    </div>
+
+                </div>
+
+              
+
+            </div>
+
+            <div class="stat-grid">
+
+                <div class="stat-card">
+                    <div class="label">
+                        Total Customers
+                    </div>
+                    <div class="value">
+                        3
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="label">
+                        Active Orders
+                    </div>
+                    <div class="value">
+                        7
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="label">
+                        In Production
+                    </div>
+                    <div class="value">
+                        1
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="label">
+                        In Quality Control
+                    </div>
+                    <div class="value">
+                        1
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="label">
+                        Ready for Shipment
+                    </div>
+                    <div class="value">
+                        1
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="label">
+                        Shipped
+                    </div>
+                    <div class="value">
+                        2
+                    </div>
+                </div>
+
+                <div class="stat-card amber">
+                    <div class="label">
+                        Delayed Orders
+                    </div>
+                    <div class="value">
+                        1
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="label">
+                        Delivered
+                    </div>
+                    <div class="value">
+                        1
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="chart-grid">
+
+                <div class="card">
+
+                    <h4>
+                        Orders by Status
+                    </h4>
+
+                    <canvas
+                        id="statusChart"
+                        height="110"
+                    ></canvas>
+
+                    <div class="mini-stats">
+
+                        <span>
+                            Ready in Warehouse:
+                            <b>1</b>
+                        </span>
+
+                        <span>
+                            In Transit:
+                            <b>1</b>
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <h4>
+                        Orders by Country
+                    </h4>
+
+                    <canvas
+                        id="countryChart"
+                        height="180"
+                    ></canvas>
+
+                </div>
+
+                <div class="card">
+
+                    <h4>
+                        Products
+                    </h4>
+
+                    <canvas
+                        id="productsChart"
+                        height="180"
+                    ></canvas>
+
+                </div>
+
+                <div class="card">
+
+                    <h4>
+                        Monthly Orders
+                    </h4>
+
+                    <canvas
+                        id="monthlyChart"
+                        height="180"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h4>
+                    Recent Orders
+                </h4>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Status</th>
+                                <th>Destination</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="recentOrdersBody"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ORDERS -->
+
+        <section
+            id="page-orders"
+            class="page"
+        >
+
+            <div class="page-head">
+
+                <div>
+                    <h2>
+                        Orders
+                    </h2>
+
+                    <p>
+                        Manage and monitor all shipment orders.
+                    </p>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="openDataModal('order')"
+                >
+                    + Add New Order
+                </button>
+
+            </div>
+
+            <div
+                id="orderFilterTabs"
+                class="filter-tabs"
+            >
+
+                <button
+                    class="active"
+                    data-f="All"
+                >
+                    All
+                </button>
+
+                <button data-f="Active">
+                    Active
+                </button>
+
+                <button data-f="Production">
+                    Production
+                </button>
+
+                <button data-f="In Transit">
+                    In Transit
+                </button>
+
+                <button data-f="Delivered">
+                    Delivered
+                </button>
+
+                <button data-f="Delayed">
+                    Delayed
+                </button>
+
+            </div>
+
+            <div class="search-box">
+
+                <input
+                    id="orderSearch"
+                    type="text"
+                    placeholder="Search orders..."
+                    oninput="renderOrders()"
+                >
+
+            </div>
+
+            <div class="filter-row">
+
+                <div class="field">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select
+                        id="statusSelect"
+                        onchange="renderOrders()"
+                    >
+                        <option value="">
+                            All statuses
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        Customer
+                    </label>
+
+                    <select
+                        id="customerSelect"
+                        onchange="renderOrders()"
+                    >
+                        <option value="">
+                            All customers
+                        </option>
+                        <option value="Green Market">
+                            Green Market
+                        </option>
+                        <option value="Herbal House">
+                            Herbal House
+                        </option>
+                        <option value="Nature Foods">
+                            Nature Foods
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        From
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dateFrom"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        To
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dateTo"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Status</th>
+                            <th>Destination</th>
+                            <th>Expected</th>
+                            <th>Updated</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="ordersBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- REGISTERED USERS -->
+
+        <section id="page-registered-users" class="page">
+            <div class="page-head">
+                <div>
+                    <h2>Registered Users</h2>
+                    <p>People who created a customer account and signed in to the portal.</p>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Registered</th>
+                            <th>Last Login</th>
+                            <th>Logins</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registeredUsersBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- CUSTOMERS -->
+
+        <section
+            id="page-customers"
+            class="page"
+        >
+
+            <div class="page-head">
+
+                <div>
+                    <h2>
+                        Customers
+                    </h2>
+
+                    <p>
+                        Customer accounts connected to Pure Herbs.
+                    </p>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="openDataModal('customer')"
+                >
+                    + Add Customer
+                </button>
+
+            </div>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Country</th>
+                            <th>Orders</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="customersBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- PRODUCTS -->
+
+        <section
+            id="page-products"
+            class="page"
+        >
+
+            <div class="page-head">
+
+                <div>
+                    <h2>
+                        Products
+                    </h2>
+
+                    <p>
+                        Herbal products available for shipment.
+                    </p>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="openDataModal('product')"
+                >
+                    + Add Product
+                </button>
+
+            </div>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Product</th>
+                            <th>Botanical Name</th>
+                            <th>Category</th>
+                            <th>Available</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="productsBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- SETTINGS -->
+
+        <section
+            id="page-settings"
+            class="page"
+        >
+
+            <div class="page-head">
+
+                <div>
+                    <h2>
+                        Settings
+                    </h2>
+
+                    <p>
+                        Configure your shipment portal.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="settings-card">
+
+                <h3>
+                    Company Information
+                </h3>
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label>
+                            Company Name
+                        </label>
+
+                        <input
+                            id="settingsCompanyName"
+                            value="Pure Herbs"
+                            type="text"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            id="settingsEmail"
+                            value=""
+                            type="email"
+                        >
+                    </div>
+
+                    <div class="field field-full">
+                        <label>
+                            Address
+                        </label>
+
+                        <input
+                            id="settingsAddress"
+                            value=""
+                            type="text"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label>Phone</label>
+                        <input id="settingsPhone" value="" type="tel">
+                    </div>
+                    <div class="field">
+                        <label>Website</label>
+                        <input id="settingsWebsite" value="" type="url">
+                    </div>
+
+                </div>
+
+                <div class="toggle-row">
+
+                    <span class="toggle"></span>
+
+                    Shipment notifications enabled
+
+                </div>
+
+                <button class="btn btn-primary" type="button" onclick="saveSettingsPage()">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </section>
+
+        <section id="page-quality" class="page">
+            <div class="page-head"><div><h2>Quality Control</h2><p>Laboratory results and customer-visible approval.</p></div><button class="btn btn-primary" type="button" onclick="openQualityAdd()">+ Add QC Result</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Order</th><th>Product</th><th>Test</th><th>Result</th><th>Specification</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="qualityBody"></tbody></table></div>
+        </section>
+
+        <section id="page-documents" class="page">
+            <div class="page-head"><div><h2>Documents</h2><p>Approved and internal order documents.</p></div><button class="btn btn-primary" type="button" onclick="openDocumentsAdd()">+ Add Document</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Document</th><th>Order</th><th>Version</th><th>Visibility</th><th>Date</th><th>Actions</th></tr></thead><tbody id="documentsBody"></tbody></table></div>
+        </section>
+
+        <section id="page-shipments" class="page">
+            <div class="page-head"><div><h2>Shipments</h2><p>Container, vessel and ETA information.</p></div><button class="btn btn-primary" type="button" onclick="openShipmentsAdd()">+ Add Shipment</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Order</th><th>Container</th><th>Seal</th><th>Vessel</th><th>Loading</th><th>Destination</th><th>ETD</th><th>ETA</th><th>Actions</th></tr></thead><tbody id="shipmentsBody"></tbody></table></div>
+        </section>
+
+        <section id="page-notifications" class="page">
+            <div class="page-head"><div><h2>Notifications</h2><p>Customer communication events and milestone templates.</p></div><button class="btn btn-primary" type="button" onclick="openNotificationsAdd()">+ Add Notification</button></div>
+            <div class="card"><h4>Notification Templates</h4><div id="notificationTemplates"></div></div>
+            <div class="card" style="margin-top:17px"><h4>Recent Notifications</h4><div id="notificationsBody"></div></div>
+        </section>
+
+        <section id="page-audit" class="page">
+            <div class="page-head"><div><h2>Audit Log</h2><p>Activity history for order operations.</p></div></div>
+            <div class="table-wrap"><table><thead><tr><th>Date</th><th>User</th><th>Action</th><th>Order</th><th>Previous</th><th>New</th><th>Details</th></tr></thead><tbody id="auditBody"></tbody></table></div>
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     ADMIN DATA MODAL
+========================================================= -->
+
+<div
+    class="modal-overlay"
+    id="dataModalOverlay"
+    onclick="if(event.target===this)closeDataModal()"
+>
+    <div class="data-modal">
+
+        <div class="data-modal-head">
+            <button
+                class="modal-close-button"
+                type="button"
+                onclick="closeDataModal()"
+                aria-label="Close"
+            >
+                ✕
+            </button>
+
+            <div class="m-eyebrow">ADMIN DATA</div>
+            <h3 id="dataModalTitle">Add New Order</h3>
+            <p id="dataModalSubtitle">
+                Add information directly from the dashboard.
+            </p>
+        </div>
+
+        <div class="data-modal-body">
+
+            <form
+                id="dataForm"
+                onsubmit="submitDataForm(event)"
+            >
+
+                <div
+                    id="orderFormFields"
+                    class="form-grid data-form-grid"
+                >
+                    <div class="field">
+                        <label>Order Number</label>
+                        <input id="newOrderId" required placeholder="PH-2026-00126">
+                    </div>
+
+                    <div class="field">
+                        <label>Customer</label>
+                        <input id="newOrderCustomer" required placeholder="Customer name">
+                    </div>
+
+                    <div class="field">
+                        <label>Product</label>
+                        <input id="newOrderProduct" required placeholder="Chamomile Flowers">
+                    </div>
+
+                    <div class="field">
+                        <label>Botanical Name</label>
+                        <input id="newOrderLatin" placeholder="Matricaria chamomilla">
+                    </div>
+
+                    <div class="field">
+                        <label>Quantity</label>
+                        <input id="newOrderQty" required placeholder="500 kg">
+                    </div>
+
+                    <div class="field">
+                        <label>Status</label>
+                        <select id="newOrderStatus">
+                            <option>Order Confirmed</option>
+                            <option>Production</option>
+                            <option>Quality Control</option>
+                            <option>Ready in Warehouse</option>
+                            <option>Shipped</option>
+                            <option>In Transit</option>
+                            <option>Delivered</option>
+                            <option>Delayed</option>
+                            <option>Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Destination</label>
+                        <input id="newOrderDest" required placeholder="Felixstowe, United Kingdom">
+                    </div>
+
+                    <div class="field">
+                        <label>Expected Delivery</label>
+                        <input id="newOrderExpected" required type="date">
+                    </div>
+
+                    <div class="field">
+                        <label>Tracking Code</label>
+                        <input id="newOrderTracking" placeholder="Same as order number if blank">
+                    </div>
+                </div>
+
+                <div
+                    id="customerFormFields"
+                    class="form-grid data-form-grid hidden"
+                >
+                    <div class="field">
+                        <label>Customer Name</label>
+                        <input id="newCustomerName" placeholder="Green Market">
+                    </div>
+
+                    <div class="field">
+                        <label>Email</label>
+                        <input id="newCustomerEmail" type="email" placeholder="contact@example.com">
+                    </div>
+
+                    <div class="field">
+                        <label>Country</label>
+                        <input id="newCustomerCountry" placeholder="USA">
+                    </div>
+                </div>
+
+                <div
+                    id="productFormFields"
+                    class="form-grid data-form-grid hidden"
+                >
+                    <div class="field">
+                        <label>Product Name</label>
+                        <input id="newProductName" placeholder="Chamomile Flowers">
+                    </div>
+
+                    <div class="field">
+                        <label>Botanical Name</label>
+                        <input id="newProductLatin" placeholder="Matricaria chamomilla">
+                    </div>
+
+                    <div class="field">
+                        <label>Category</label>
+                        <input id="newProductCategory" placeholder="Flowers">
+                    </div>
+
+                    <label class="field" style="display:flex;align-items:center;gap:10px">
+                        <input id="newProductAvailable" type="checkbox" checked>
+                        <span>Available for orders</span>
+                    </label>
+                </div>
+
+                <div
+                    id="dataFormError"
+                    class="form-error hidden"
+                ></div>
+
+                <div class="data-modal-actions">
+                    <button
+                        class="btn btn-outline"
+                        type="button"
+                        onclick="closeDataModal()"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        id="dataSubmitButton"
+                        type="submit"
+                    >
+                        Save
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
+     ORDER MODAL
+========================================================= -->
+
+<div
+    class="modal-overlay"
+    id="orderModalOverlay"
+    onclick="if(event.target===this)closeOrderModal()"
+>
+
+    <div class="order-modal">
+
+        <div class="modal-head">
+
+            <div
+                class="modal-close"
+                onclick="closeOrderModal()"
+            >
+                ✕
+            </div>
+
+            <div class="m-eyebrow">
+                Order Details
+            </div>
+
+            <h3 id="mOrderId">
+                —
+            </h3>
+
+            <div
+                class="m-sub"
+                id="mCustomer"
+            >
+                —
+            </div>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div id="mAlert"></div>
+
+            <div class="m-meta-grid">
+
+                <div>
+                    <div class="m-label">
+                        Product
+                    </div>
+
+                    <div
+                        class="m-value"
+                        id="mProduct"
+                    >
+                        —
+                    </div>
+                </div>
+
+                <div>
+                    <div class="m-label">
+                        Quantity
+                    </div>
+
+                    <div
+                        class="m-value"
+                        id="mQty"
+                    >
+                        —
+                    </div>
+                </div>
+
+                <div>
+                    <div class="m-label">
+                        Destination
+                    </div>
+
+                    <div
+                        class="m-value"
+                        id="mDest"
+                    >
+                        —
+                    </div>
+                </div>
+
+                <div>
+                    <div class="m-label">
+                        Expected
+                    </div>
+
+                    <div
+                        class="m-value"
+                        id="mExpected"
+                    >
+                        —
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="m-progress-row">
+
+                <div>
+
+                    <div class="status-eyebrow">
+                        Shipment status
+                    </div>
+
+                    <div
+                        class="status-title"
+                        id="mStatusTitle"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+                <span
+                    class="pill"
+                    id="mPill"
+                >
+                    —
+                </span>
+
+            </div>
+
+            <div class="vine-track">
+
+                <div
+                    id="mVineFill"
+                    class="vine-fill"
+                    style="width:0%"
+                ></div>
+
+            </div>
+
+            <div
+                id="mPct"
+                class="status-pct"
+            >
+                0%
+            </div>
+
+            <div
+                id="mStepper"
+                class="m-stepper"
+            ></div>
+
+            <div id="mAdvancedDetails"></div>
+
+            <div class="m-docs" id="orderDownloadDocuments">
+
+                <div class="m-docs-head">
+                    <h5>Documents</h5>
+                    <span class="m-docs-note">Download shipment documents</span>
+                </div>
+
+                <div class="m-doc">
+                    <div>
+                        <b>Commercial Invoice</b>
+                        <small>Invoice and order information</small>
+                    </div>
+                    <button
+                        class="doc-download"
+                        type="button"
+                        onclick="downloadDocument('commercial-invoice')"
+                    >
+                        ↓ Download
+                    </button>
+                </div>
+
+                <div class="m-doc">
+                    <div>
+                        <b>Packing List</b>
+                        <small>Packing, quantity and shipment details</small>
+                    </div>
+                    <button
+                        class="doc-download"
+                        type="button"
+                        onclick="downloadDocument('packing-list')"
+                    >
+                        ↓ Download
+                    </button>
+                </div>
+
+                <div class="m-doc">
+                    <div>
+                        <b>Quality Certificate</b>
+                        <small>Quality and product certificate</small>
+                    </div>
+                    <button
+                        class="doc-download"
+                        type="button"
+                        onclick="downloadDocument('quality-certificate')"
+                    >
+                        ↓ Download
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-foot">
+
+            <button
+                class="btn btn-outline"
+                onclick="closeOrderModal()"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+    <script src="script.js?v=20260818-persistence-fix" defer></script>
+</body>
+</html>
